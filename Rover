@@ -21,6 +21,23 @@ void printMissionSummary(int x, int y, string direction,
          << successfulCommands << endl;
 }
 
+void printRoverStatus(int x, int y, string direction, int battery) {
+    cout << "Current coordinates: (" << x << ", " << y << ") ";
+    cout << "Heading: " << direction << " ";
+    cout << "Battery: " << battery << endl;
+}
+
+void printGoalResetResult(bool goalReached, bool roverReset) {
+    if (goalReached && roverReset)
+        cout << "Goal reached and rover reset." << endl;
+    else if (goalReached && !roverReset)
+        cout << "Goal reached but rover not reset." << endl;
+    else if (!goalReached && roverReset)
+        cout << "Goal not reached but rover reset." << endl;
+    else
+        cout << "Goal not reached and rover not reset." << endl;
+}
+
 int main() {
     int x = 0;
     int y = 0;
@@ -181,11 +198,9 @@ int main() {
                 succesfulCommands = succesfulCommands + 1;
             }
 
-            if (commandWorked) {
+           if (commandWorked) {
                 cout << "Command " << command << " succeeded. ";
-                cout << "Current coordinates: (" << x << ", " << y << ") ";
-                cout << "Heading: " << direction << " ";
-                cout << "Battery: " << battery << endl;
+                printRoverStatus(x, y, direction, battery);
             }
 
             if (x == goalX && y == goalY) {
@@ -194,18 +209,12 @@ int main() {
         
         
     }
+    
     printMissionSummary(x, y, direction, battery, succesfulCommands);
 
     bool roverReset = roverIsReset(x, y, battery);
 
-        if (goalReached && roverReset)
-            cout << "Goal reached and rover reset." << endl;
-        else if (goalReached && !roverReset)
-            cout << "Goal reached but rover not reset." << endl;
-        else if (!goalReached && roverReset)
-            cout << "Goal not reached but rover reset." << endl;
-        else
-            cout << "Goal not reached and rover not reset." << endl;
+    printGoalResetResult(goalReached, roverReset);
     
 }
     return 0;
