@@ -11,6 +11,16 @@ bool roverIsReset(int x, int y, int battery) {
     return x == 0 && y == 0 && battery == 40;
 }
 
+void printMissionSummary(int x, int y, string direction,
+                        int battery, int successfulCommands) {
+    cout << "Mission Complete!" << endl;
+    cout << "Rover ended at coordinates (" << x << "," << y
+         << ") with heading " << direction
+         << " and battery " << battery << "." << endl;
+    cout << "Number of Successful Commands: "
+         << successfulCommands << endl;
+}
+
 int main() {
     int x = 0;
     int y = 0;
@@ -27,16 +37,16 @@ int main() {
     while (running) {
 
 
-    cout << "Enter rover commands: ";
+    cout << "Input mission: ";
     cin >> commands;
 
     if (commands == "quit") {
         return 0;
     }
 
-    cout << "Enter your goal X: ";
+    cout << "Input goal x coordinate: ";
     cin >> goalX;
-    cout << "Enter your goal Y: ";
+    cout << "Input goal y coordinate: ";
     cin >> goalY;
 
     succesfulCommands = 0;
@@ -184,8 +194,7 @@ int main() {
         
         
     }
-    cout << "Rover ended at coordinates (" << x << "," << y << ") with heading " << direction << " and battery " << battery << "." << endl;
-    cout << "Number of Successful Commands: " << succesfulCommands << endl;
+    printMissionSummary(x, y, direction, battery, succesfulCommands);
 
     bool roverReset = roverIsReset(x, y, battery);
 
