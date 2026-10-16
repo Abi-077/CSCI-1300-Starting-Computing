@@ -11,6 +11,18 @@ bool roverIsReset(int x, int y, int battery) {
     return x == 0 && y == 0 && battery == 40;
 }
 
+bool atChargingStation(int x, int y) {
+    return x == 0 && y == 0;
+}
+
+bool hasEnoughBattery(int battery, int cost) {
+    return battery >= cost;
+}
+
+bool isWithinBounds(int x, int y) {
+    return x >= 0 && x <= 9 && y >= 0 && y <= 9;
+}
+
 void printMissionSummary(int x, int y, string direction,
                         int battery, int successfulCommands) {
     cout << "Mission Complete!" << endl;
@@ -78,9 +90,9 @@ int main() {
         bool commandWorked = false;
 
         if (command == 'F') {
-            if (battery >= 2) {
+            if (hasEnoughBattery(battery, 2)) {
                 if (direction == "East") {
-                    if ( x < 9) {
+                    if (isWithinBounds(x + 1, y)) {
                     x = x + 1;
                     battery = battery - 2;
                     commandWorked = true;
@@ -90,7 +102,7 @@ int main() {
                     }
                 }
                 else if (direction == "West") {
-                    if ( x > 0) {
+                    if (isWithinBounds(x - 1, y)) {
                     x = x - 1;
                     battery = battery - 2;
                     commandWorked = true;
@@ -100,7 +112,7 @@ int main() {
                     }
                 }
                 else if (direction == "North") {
-                    if ( y < 9) {
+                    if (isWithinBounds(x, y + 1)) {
                     y = y + 1;
                     battery = battery - 2;
                     commandWorked = true;
@@ -111,7 +123,7 @@ int main() {
                    
                 }
                 else if (direction == "South") {
-                    if ( y > 0) {
+                    if (isWithinBounds(x, y - 1)) {
                     y = y - 1;
                     battery = battery - 2;
                     commandWorked = true;
@@ -128,7 +140,7 @@ int main() {
         }    
 
             else if (command == 'L') {
-                if (battery >= 1) {
+                if (hasEnoughBattery(battery, 1)) {
                     if (direction == "East") {
                         direction = "North";
                     }
@@ -151,7 +163,7 @@ int main() {
             }
 
             else if (command == 'R') {
-                if (battery >=1 ) {
+                if (hasEnoughBattery(battery, 1)) {
                     if (direction == "East") {
                         direction = "South";
                     }
@@ -173,7 +185,7 @@ int main() {
                 }
             }
             else if (command == 'S') {
-                if (battery >= 3) {
+                if (hasEnoughBattery(battery, 3)) {
                     battery = battery - 3;
                     commandWorked = true;
                 }
@@ -182,7 +194,7 @@ int main() {
                 }
             }
             else if (command == 'C') {
-                if ( x == 0 && y == 0) {
+                if (atChargingStation(x, y)) {
                     battery = 40;
                     commandWorked = true;
                 }
