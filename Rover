@@ -56,7 +56,7 @@ int main() {
 
     string direction = "East";
     int battery = 40;
-    int succesfulCommands = 0;
+    int successfulCommands = 0;
     bool goalReached = false;
     int goalX = 0;
     int goalY = 0;
@@ -78,7 +78,7 @@ int main() {
     cout << "Input goal y coordinate: ";
     cin >> goalY;
 
-    succesfulCommands = 0;
+    successfulCommands = 0;
 
     goalReached = checkGoal(x, y, goalX, goalY);
 
@@ -207,7 +207,7 @@ int main() {
             }
 
             if (commandWorked) {
-                succesfulCommands = succesfulCommands + 1;
+                successfulCommands = successfulCommands + 1;
             }
 
            if (commandWorked) {
@@ -220,14 +220,14 @@ int main() {
             }
         
         
+        }
+    
+     printMissionSummary(x, y, direction, battery, successfulCommands);
+
+     bool roverReset = roverIsReset(x, y, battery);
+
+     printGoalResetResult(goalReached, roverReset);
+    
     }
-    
-    printMissionSummary(x, y, direction, battery, succesfulCommands);
-
-    bool roverReset = roverIsReset(x, y, battery);
-
-    printGoalResetResult(goalReached, roverReset);
-    
-}
     return 0;
 }
