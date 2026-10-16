@@ -1,0 +1,203 @@
+#include <iostream>
+#include <string>
+#include <cstddef> //Lets us use size_t
+using namespace std;
+
+bool checkGoal(int x, int y, int goalX, int goalY) {
+    return x == goalX && y == goalY;
+}
+
+bool roverIsReset(int x, int y, int battery) {
+    return x == 0 && y == 0 && battery == 40;
+}
+
+int main() {
+    int x = 0;
+    int y = 0;
+
+    string direction = "East";
+    int battery = 40;
+    int succesfulCommands = 0;
+    bool goalReached = false;
+    int goalX = 0;
+    int goalY = 0;
+    string commands;
+    bool running = true;
+    
+    while (running) {
+
+
+    cout << "Enter rover commands: ";
+    cin >> commands;
+
+    if (commands == "quit") {
+        return 0;
+    }
+
+    cout << "Enter your goal X: ";
+    cin >> goalX;
+    cout << "Enter your goal Y: ";
+    cin >> goalY;
+
+    succesfulCommands = 0;
+
+    goalReached = checkGoal(x, y, goalX, goalY);
+
+
+// size_t is a type for counting sizes, like the number of characters in a string.
+// It matches the type returned by commands.length(), avoiding a comparison warning.
+    for (size_t i = 0; i < commands.length(); i++) {
+        char command = commands[i];
+        bool commandWorked = false;
+
+        if (command == 'F') {
+            if (battery >= 2) {
+                if (direction == "East") {
+                    if ( x < 9) {
+                    x = x + 1;
+                    battery = battery - 2;
+                    commandWorked = true;
+                    }
+                    else {
+                        cout << "command F rejected: out of bounds" << endl;
+                    }
+                }
+                else if (direction == "West") {
+                    if ( x > 0) {
+                    x = x - 1;
+                    battery = battery - 2;
+                    commandWorked = true;
+                    }
+                    else {
+                        cout << "command F rejected: out of bounds" << endl;
+                    }
+                }
+                else if (direction == "North") {
+                    if ( y < 9) {
+                    y = y + 1;
+                    battery = battery - 2;
+                    commandWorked = true;
+                    }
+                    else {
+                        cout << "command F rejected: out of bounds" << endl;
+                    }
+                   
+                }
+                else if (direction == "South") {
+                    if ( y > 0) {
+                    y = y - 1;
+                    battery = battery - 2;
+                    commandWorked = true;
+                    }
+                    else {
+                        cout << "command F rejected: out of bounds" << endl;
+                    }
+                }
+            }
+            else if (battery < 2) {
+                cout << "command F rejected: insufficient battery" << endl;
+            }
+
+        }    
+
+            else if (command == 'L') {
+                if (battery >= 1) {
+                    if (direction == "East") {
+                        direction = "North";
+                    }
+                    else if (direction == "North") {
+                        direction = "West";
+                    }
+                    else if (direction == "West") {
+                        direction = "South";
+                    }
+                    else if (direction == "South") {
+                        direction = "East";
+                    }
+
+                    battery = battery - 1;
+                    commandWorked = true;
+                }
+                else if (battery < 1) {
+                    cout << "command L rejected: insufficient battery" << endl;
+                }
+            }
+
+            else if (command == 'R') {
+                if (battery >=1 ) {
+                    if (direction == "East") {
+                        direction = "South";
+                    }
+                    else if (direction == "South") {
+                        direction = "West";
+                    }
+                    else if (direction == "West") {
+                        direction = "North";
+                    }
+                    else if (direction == "North") {
+                        direction = "East";
+                    }
+
+                    battery = battery - 1;
+                    commandWorked = true;
+                }
+                else if (battery < 1) {
+                    cout << "command R rejected: insufficient battery" << endl;
+                }
+            }
+            else if (command == 'S') {
+                if (battery >= 3) {
+                    battery = battery - 3;
+                    commandWorked = true;
+                }
+                else if (battery < 3) {
+                    cout << "command S rejected: insufficient battery" << endl;
+                }
+            }
+            else if (command == 'C') {
+                if ( x == 0 && y == 0) {
+                    battery = 40;
+                    commandWorked = true;
+                }
+                else {
+                    cout << "command C rejected: not at charging station" << endl;
+                }
+            }
+            else {
+                cout << "command " << command << " rejected: invalid command" << endl;
+            }
+
+            if (commandWorked) {
+                succesfulCommands = succesfulCommands + 1;
+            }
+
+            if (commandWorked) {
+                cout << "Command " << command << " succeeded. ";
+                cout << "Current coordinates: (" << x << ", " << y << ") ";
+                cout << "Heading: " << direction << " ";
+                cout << "Battery: " << battery << endl;
+            }
+
+            if (x == goalX && y == goalY) {
+                goalReached = true;
+            }
+        
+        
+    }
+    cout << "Rover ended at coordinates (" << x << "," << y << ") with heading " << direction << " and battery " << battery << "." << endl;
+    cout << "Number of Successful Commands: " << succesfulCommands << endl;
+
+    bool roverReset = roverIsReset(x, y, battery);
+
+        if (goalReached && roverReset)
+            cout << "Goal reached and rover reset." << endl;
+        else if (goalReached && !roverReset)
+            cout << "Goal reached but rover not reset." << endl;
+        else if (!goalReached && roverReset)
+            cout << "Goal not reached but rover reset." << endl;
+        else
+            cout << "Goal not reached and rover not reset." << endl;
+    
+}
+    return 0;
+}
